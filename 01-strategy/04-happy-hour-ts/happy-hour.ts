@@ -1,46 +1,55 @@
 
 class Beer {
-  brand: string
-  price: number
-  constructor(brand: string, price: number) {
-    this.brand = brand
-    this.price = price
-  }
+    brand: string
+    price: number
+    constructor(brand: string, price: number) {
+        this.brand = brand
+        this.price = price
+    }
 }
 
 interface HappyHourStrategy {
-  discount: number
-  calculateNewPrice(beer: Beer): number
+    discount: number
+    calculateNewPrice(beer: Beer): number
 }
 
 class TenPercent implements HappyHourStrategy {
-  // à compléter
+    discount = 0.1
+    calculateNewPrice(beer : Beer) : number{
+        return beer.price - beer.price * this.discount
+    }
 }
 
 class TwentyFivePercent implements HappyHourStrategy {
-  // à compléter
+    discount = 0.25
+    calculateNewPrice(beer : Beer) : number{
+        return beer.price - beer.price * this.discount
+    }
 }
 
 class NoDiscount implements HappyHourStrategy {
-  // à compléter
+    discount = 0
+    calculateNewPrice(beer : Beer) : number{
+        return beer.price - beer.price * this.discount
+    }
 }
 
 class PubWaiter {
-  name: string
-  strategy: HappyHourStrategy
-  constructor(name: string) {
-    this.name = name
-    return this
-  }
+    name: string
+    strategy: HappyHourStrategy
+    constructor(name: string) {
+        this.name = name
+        return this
+    }
 
-  useStrategy(strategy: HappyHourStrategy) {
-    // à compléter
-    return this
-  }
+    useStrategy(strategy: HappyHourStrategy) {
+        this.strategy = strategy
+        return this
+    }
 
-  calculatePrice(beer: Beer) {
-    // à compléter
-  }
+    calculatePrice(beer: Beer) {
+        return this.strategy.calculateNewPrice(beer)
+    }
 }
 
 /* initialize strategy */

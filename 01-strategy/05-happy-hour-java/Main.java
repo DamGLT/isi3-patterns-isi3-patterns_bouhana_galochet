@@ -29,23 +29,48 @@ class Beer {
 }
 
 interface HappyHourStrategy {
-  // à compléter
+  public double calculateNewPrice(Beer beer);
 }
 
 class NoDiscount implements HappyHourStrategy {
-  // à compléter
+  private double discount = 1.;
+
+  public double calculateNewPrice(Beer beer) {
+    return beer.getPrice() * this.discount;
+  }
 }
 
 class TenPercent implements HappyHourStrategy {
-  // à compléter
+  private double discount = 0.9;
+
+  public double calculateNewPrice(Beer beer) {
+    return beer.getPrice() * this.discount;
+  }
 }
 
 class TwentyFivePercent implements HappyHourStrategy {
-  // à compléter
+  private double discount = 0.75;
+
+  public double calculateNewPrice(Beer beer) {
+    return beer.getPrice() * this.discount;
+  }
 }
 
 class PubWaiter {
-// à compléter
+  private String name ;
+  private HappyHourStrategy strategy;
+
+  public PubWaiter(String name){
+    this.name = name;
+  }
+
+  public void setStrategy(HappyHourStrategy strategy){
+    this.strategy = strategy;
+  }
+
+  public double calculatePrice(Beer beer){
+      return this.strategy.calculateNewPrice(beer);
+  }
 }
 
 
