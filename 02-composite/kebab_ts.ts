@@ -1,51 +1,51 @@
-class Component {
-    constructor() {}
-    operation() {}
-    add (component) {}
-    isVG(){}
+interface Component {
+    name: string
+
+    isVG(): boolean
+    operation(): void
 }
 
-class Leaf extends Component {
-    constructor(name, isVege) {
-        super()
+class Leaf implements Component {
+    isVege: boolean
+    name: string
+
+    constructor(name: string, isVege: boolean) {
         this.name = name
         this.isVege = isVege
-
-        console.log("Leaf " + this.name + " created : " + ((isVege)? "VG" : "non VG"))
     }
 
-    operation (){
+    operation(){
         console.log(`operation -> ${this.name}`)
     }
 
-    isVG(){
+    isVG() {
         return this.isVege
     }
 }
 
-class Composite extends Component {
-    constructor(name) {
-        super()
+class Composite implements Component {
+    name: string
+    composition: Array<Component>
+
+    constructor(name: string){
         this.name = name
-        this.children = []
+        this.composition = []
         console.log(`Composite ${name} created`)
     }
 
     operation() {
         console.log('Composite Operation for: ' + this.name)
-        this.children.forEach(element => {
+        this.composition.forEach(element => {
             element.operation()
         })
     }
 
-    add(component) {
-        this.children.push(component)
+    add(comp: Component) {
+        this.composition.push(comp)
     }
 
-    isVG(component){
-        return this.children.every(element =>
-            element.isVG()
-        )
+    isVG(){
+        return this.composition.every(element => element.isVG())
     }
 
 }
@@ -56,7 +56,7 @@ let garniture = new Composite('garniture')
 garniture.add(new Leaf('salade', true))
 garniture.add(new Leaf('tomate', true))
 garniture.add(new Leaf('oignons', true))
-garniture.add(new Leaf('veau', false))
+//garniture.add(new Leaf('veau', false))
 garniture.add(new Leaf('steak soja', true))
 
 sandwich.add(garniture)
