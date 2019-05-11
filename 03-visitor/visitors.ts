@@ -1,19 +1,21 @@
 //👋 Visitor Pattern
 
 interface Visitor {
-    visit(item: Visitable):void
+    visit(item: Visitable):void;
 }
 
 interface Visitable {
-    accept(visitor: Visitor): void
+    accept(visitor: Visitor):void;
 }
 
-class Garniture implements Visitable {
-    name: string
-    isVege: boolean
-    constructor(name: string) {
-        this.name = name
-        this.isVege = true
+class Beer implements Visitable {
+    brand: string
+    price: number
+    discountPrice: number
+    constructor(brand: string, price: number) {
+        this.brand = brand
+        this.price = price
+        this.discountPrice = price
     }
     public accept(visitor: Visitor) {
         visitor.visit(this)
@@ -21,16 +23,24 @@ class Garniture implements Visitable {
 
 }
 
-class VG implements Visitor {
-    visit(item: Garniture) {
+class Discount implements Visitor {
+    visit(item: Beer) {
 
-        switch(item.name) {
-            case ("veau" || "boeuf" || "viande"): {
-                item.isVege = false
+        switch(item.brand) {
+            case "Chouffe": {
+                item.discountPrice = item.price * 0.9
+                break;
+            }
+            case "Pale Ale": {
+                item.discountPrice = item.price * 1.0
+                break;
+            }
+            case "IPA": {
+                item.discountPrice = item.price * 0.75
                 break;
             }
             default: {
-                item.isVege = true
+                item.discountPrice = item.price * 1.0
                 break;
             }
         }
@@ -38,25 +48,24 @@ class VG implements Visitor {
     }
 }
 
-class Kebab implements Visitable {
-    garniture: Garniture[] = []
-    constructor(garniture: Garniture[]) {
-        this.garniture = garniture
+class HappyHour implements Visitable {
+    beers: Beer[] = []
+    constructor(beers: Beer[]) {
+        this.beers = beers
     }
 
     public accept(visitor: Visitor) {
-        this.garniture.forEach(garniture => garniture.accept(visitor))
+        this.beers.forEach(beer => beer.accept(visitor))
     }
 }
 
-const list = new Kebab([
-    new Garniture("salade"),
-    new Garniture("tomate"),
-    new Garniture("oignon"),
-    new Garniture("veau")
+const list = new HappyHour([
+    new Beer("Chouffe", 3.0),
+    new Beer("Pale Ale", 4.0),
+    new Beer("IPA", 5.0)
 ])
 
-list.accept(new VG())
+list.accept(new Discount())
 
 console.log(list)
 

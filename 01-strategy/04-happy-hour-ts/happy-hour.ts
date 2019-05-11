@@ -39,6 +39,7 @@ class PubWaiter {
     strategy: HappyHourStrategy
     constructor(name: string) {
         this.name = name
+        this.strategy = new NoDiscount
         return this
     }
 
