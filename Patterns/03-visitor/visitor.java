@@ -1,79 +1,79 @@
-import java.lang.String;
-import java.lang.System;
 import java.util.ArrayList;
-import java.util.List;
 
-interface Visitor {
-  public void visit(Visitable visitable);
-}
+public class Main {
 
-interface Visitable{
-  public void accept(Visitor visitor);
-}
-
-
-class Kebab implements Visitable{
-  public List<Garniture> garniture = new ArrayList<>();
-  public boolean isVG = true;
-
-  public Kebab(List<Garniture> garnitures){
-    this.garniture = garnitures;
+  interface Visitor {
+    public boolean visit(Visitable item);
   }
 
-  public void accept(Visitor visitor){
-    for(Garniture item : this.garniture){
-      item.accept(visitor);
+  interface Visitable {
+    public boolean accept(Visitor visitor);
+  }
+
+  static class Garniture implements Visitable{
+    private String name;
+    private boolean isVege;
+
+    public Garniture(String name, boolean isVege) {
+      this.name=name;
+      this.isVege=isVege;
+    }
+
+    @Override
+    public boolean accept(Visitor visitor) {
+      return visitor.visit(this);
     }
   }
-}
 
-class Garniture implements Visitable{
-  public String name;
-  public boolean isVege;
+  static class Kebab implements Visitable {
+    public ArrayList<Garniture> garnitures;
 
-  public Garniture(String name){
-    this.name = name;
-  }
+    public Kebab() {
+      this.garnitures=new ArrayList<>();
+    }
 
-  public void accept(Visitor visitor){
-    visitor.visit(this);
-  }
-}
+    public void add (Garniture garn) {
+      this.garnitures.add(garn);
+    }
 
-class VG implements Visitor{
-
-  public VG(){
-
-  }
-
-  public void visit(Garniture item){
-    switch(item.name){
-      case "viande":
-      case "veau":
-      case "boeuf":
-        item.isVege = false;
-        break;
-      default:
-        item.isVege = true;
-        break;
+    public boolean accept(Visitor visitor) {
+      return visitor.visit(this);
     }
   }
-}
 
+  static class IsVG implements Visitor {
 
-class Main {
-  public static void main(String[] args) {
-    List<Garniture> garniture = new ArrayList<>();
-    garniture.add(new Garniture("veau"));
-    garniture.add(new Garniture("salade"));
-    garniture.add(new Garniture("viande"));
-    garniture.add(new Garniture("tomate"));
-    garniture.add(new Garniture("oignons"));
-    Kebab sandwich = new Kebab(garniture);
-
-    for(Garniture garn : sandwich.garniture){
-      System.out.println(garn.name);
-      System.out.println(garn.isVege);
+    public boolean visit(Visitable item) {
+      if (item instanceof Garniture) {
+        return ((Garniture) item).isVege;
+      }
+      else if (item instanceof Kebab) {
+        for (Garniture garn : ((Kebab)item).garnitures) {
+          if (!garn.isVege) {
+            return false;
+          }
+        }
+        return true;
+      }
+      else {
+        return false;
+      }
     }
+  }
+
+  public static void main(String [] args) {
+    Kebab sandwich = new Kebab();
+
+    sandwich.add(new Garniture("salade",true));
+    sandwich.add(new Garniture("tomate",true));
+    sandwich.add(new Garniture("oignons",true));
+    sandwich.add(new Garniture("veau",false));
+    
+    if(sandwich.accept(new IsVG())){
+      System.out.println("Kebab VG");
+    } else{
+      System.out.println("Kebab non VG");
+    }
+
   }
 }
