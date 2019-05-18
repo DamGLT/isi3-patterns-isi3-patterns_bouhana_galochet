@@ -1,5 +1,5 @@
-<h6>Alizée BOUHANA</h6>
-<h6>Damien GALOCHET</h6>
+**Alizée BOUHANA**
+**Damien GALOCHET**
 
 <h1>Conclusion</h1>
 <p>
